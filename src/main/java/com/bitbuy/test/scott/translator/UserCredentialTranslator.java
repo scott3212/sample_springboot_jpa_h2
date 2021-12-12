@@ -11,11 +11,17 @@ public class UserCredentialTranslator implements ObjectTranslator<User, Credenti
 
 	@Override
 	public CredentialResponse entityToResponse(User entity) {
-		return CredentialResponse.builder().username(entity.getUsername()).uuid(entity.getUuid()).build();
+		return CredentialResponse.builder()
+				.username(entity.getUsername())
+				.uuid(entity.getUuid())
+				.build();
 	}
 
 	@Override
 	public User requestToEntity(CredentialRequest request) {
-		return User.builder().username(request.getUsername()).password(request.getPassword()).build();
+		return User.builder()
+				.username(request.getUsername())
+				.password(request.getPassword())
+				.build();
 	}
 }

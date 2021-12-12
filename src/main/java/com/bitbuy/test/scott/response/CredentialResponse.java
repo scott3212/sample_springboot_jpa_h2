@@ -12,4 +12,5 @@ import lombok.ToString;
 public class CredentialResponse {
 	private UUID uuid;
 	private String username;
+	private String jwt;
 }
