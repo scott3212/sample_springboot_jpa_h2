@@ -1,4 +1,4 @@
-package util;
+package com.bitbuy.test.scott.util;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,8 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import com.bitbuy.test.scott.entity.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -23,7 +24,7 @@ public class JwtUtility implements Serializable {
 	private String secret = "secret";
 
 	// retrieve username from jwt token
-	public String getUsernameFromToken(String token) {
+	public String getUuidFromToken(String token) {
 		return getClaimFromToken(token, Claims::getSubject);
 	}
 
@@ -49,9 +50,9 @@ public class JwtUtility implements Serializable {
 	}
 
 	// generate token for user
-	public String generateToken(UserDetails userDetails) {
+	public String generateToken(User user) {
 		Map<String, Object> claims = new HashMap<>();
-		return doGenerateToken(claims, userDetails.getUsername());
+		return doGenerateToken(claims, user.getUuid().toString());
 	}
 
 	private String doGenerateToken(Map<String, Object> claims, String subject) {
@@ -62,9 +63,9 @@ public class JwtUtility implements Serializable {
 	}
 
 	// validate token
-	public Boolean validateToken(String token, UserDetails userDetails) {
-		final String username = getUsernameFromToken(token);
-		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+	public Boolean validateToken(String token, User user) {
+		final String username = getUuidFromToken(token);
+		return (username.equals(user.getUuid().toString()) && !isTokenExpired(token));
 	}
 
 }
