@@ -18,11 +18,13 @@ import com.bitbuy.interview.scott.request.UserRequest;
 import com.bitbuy.interview.scott.response.UserResponse;
 import com.bitbuy.interview.scott.translator.UserTranslator;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/users")
 @Slf4j
+@SecurityRequirement(name = "Authorization")
 public class UserController {
 	@Autowired
 	IUserRepository userRepository;

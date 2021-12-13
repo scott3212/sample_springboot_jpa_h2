@@ -32,6 +32,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/h2/**").permitAll()// for H2 Console
 				.antMatchers("/api/login").permitAll()
 				.antMatchers("/api/register").permitAll()
+				.antMatchers("/swagger-ui**").permitAll()
+				.antMatchers("/swagger-ui/**").permitAll()
+				.antMatchers("/v3/api-docs/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
