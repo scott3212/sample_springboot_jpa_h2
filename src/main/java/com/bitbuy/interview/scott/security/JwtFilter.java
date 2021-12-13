@@ -19,7 +19,10 @@ import com.bitbuy.interview.scott.entity.User;
 import com.bitbuy.interview.scott.repository.IUserRepository;
 import com.bitbuy.interview.scott.util.JwtUtility;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 	private final static String HEADER_AUTH = "Authorization";
 
@@ -33,16 +36,26 @@ public class JwtFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		final String authHeader = request.getHeader(HEADER_AUTH);
+		String requestUUID = null;
+		try {
+			requestUUID = request.getRequestURI().substring(request.getRequestURI().indexOf("users") + 6)
+					.substring(0, 36);
+		} catch (IndexOutOfBoundsException e) {
+			log.info("The request URI " + request.getRequestURI() + "doesn't contains user's UUID");
+		}
 		if (isBearerToken(authHeader)) {
 			String jwt = authHeader.substring(7);
 			String uuid = jwtUtility.getUuidFromToken(jwt);
-			if (uuid != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+			if (uuid != null
+					&& SecurityContextHolder.getContext().getAuthentication() == null
+					&& (requestUUID == null || uuid.equals(requestUUID))) {
 				User user = userRepository.findByUUID(UUID.fromString(uuid));
 				if (jwtUtility.validateToken(jwt, user)) {
 					UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 							user, null, user.getAuthorities());
-					usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(
-							request));
+					usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource()
+							.buildDetails(
+									request));
 					SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 				}
 			}
