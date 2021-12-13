@@ -14,7 +14,7 @@ This endpoint will create a new user. It will verify if the username already exi
 This endpoint will log a user in. It will check if the username & password pair are correct. The response is the same as the /api/register endpoint.
 3. Get User Information - GET /api/users/{uuid}
 This is a secure endpoint. A valid JWT token must be generated from one of the two endpoints above and passed into the header:
-![][img/addBearerToken.jpg]
+![](img/addBearerToken.jpg)
 and only authorized users with a valid JWT token can access this endpoint.
 4. Update User Information - POST /api/users/{uuid}
 This is also a secure endpoint. It's used for updating a user's information.
